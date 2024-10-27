@@ -12,3 +12,9 @@ export const getBooksInTranslation = async (translation) => {
   const response = await axios.get(URL);
   return response.data;
 };
+
+export const getChapterInBook = async (translation, book, num) => {
+  const URL = `https://bible.helloao.org/api/${translation}/${book}/${num}.json`;
+  const response = await axios.get(URL);
+  return response.data;
+};

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   getTranslations,
   getBooksInTranslation,
@@ -7,38 +7,39 @@ import {
 
 const TranslationDetail = () => {
   const { name } = useParams(); // Get the dynamic URL parameter
-  const [translation, setTranslation] = useState(null);
+
+  // const [translation, setTranslation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [books, setBooks] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchTranslationDetail = async () => {
-      try {
-        const data = await getTranslations();
-        const foundTranslation = data.translations.find(
-          (t) => t.shortName.toLowerCase() === name.toLowerCase()
-        );
-        if (foundTranslation) {
-          setTranslation(foundTranslation);
-        } else {
-          setError("Translation not found");
-        }
-      } catch (err) {
-        setError("Failed to fetch data");
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchTranslationDetail = async () => {
+  //     try {
+  //       const data = await getTranslations();
+  //       const foundTranslation = data.translations.find(
+  //         (t) => t.shortName.toLowerCase() === name.toLowerCase()
+  //       );
+  //       if (foundTranslation) {
+  //         setTranslation(foundTranslation);
+  //       } else {
+  //         setError("Translation not found");
+  //       }
+  //     } catch (err) {
+  //       setError("Failed to fetch data");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchTranslationDetail();
-  }, [name]);
+  //   fetchTranslationDetail();
+  // }, [name]);
 
   useEffect(() => {
     const fetchTranslations = async () => {
       try {
         const data = await getBooksInTranslation(name);
-        setBooks(data); // data.translations should be an array
+        setBooks(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -54,16 +55,21 @@ const TranslationDetail = () => {
 
   return (
     <div className='container mx-auto text-center'>
-      <h1 className='text-4xl'>{translation.name}</h1>
-      <ul className='grid grid-cols-1 gap-5 container mx-auto'>
+      <h1 className='text-4xl'>{books.translation.name}</h1>
+      <div className='grid grid-cols-1 gap-5 container mx-auto'>
         {books.books.map((book) => (
-          <li
+          <Link
+            to={`/translations/${name}/${book.name}/${book.numberOfChapters}`}
             className='shadow cursor-pointer p-2 hover:bg-gray-100 hover:text-blue-500'
             key={book.id}>
-            {book.name}
-          </li>
+            <p className='font-bold'>{book.name}</p>
+            <p className='text-sm text-neutral-500'>{book.title}</p>
+            <p className='text-sm text-neutral-500'>
+              Number of Chapters: {book.numberOfChapters}
+            </p>
+          </Link>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

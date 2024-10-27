@@ -57,11 +57,11 @@ function Translations() {
           placeholder='Search...'
         />
       </header>
-      <div className='grid grid-cols-3 gap-5 container mx-auto'>
+      <div className='grid grid-cols-1 gap-5 container mx-auto'>
         {searchResults.map((translation) => (
           <Link
             className='shadow cursor-pointer p-2 hover:bg-gray-100 hover:text-blue-500'
-            to={`/translations/${translation.shortName}`}>
+            to={`/translations/${translation.id}`}>
             <p className='font-bold'>{translation.name}</p>
             <p className='text-sm text-neutral-500'>
               Language: {translation.languageEnglishName}
